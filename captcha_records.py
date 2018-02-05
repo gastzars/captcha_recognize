@@ -92,7 +92,6 @@ def create_data_list(image_dir):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     image = cv2.threshold(image,0,255,cv2.THRESH_BINARY)[1]
     input_img = np.array(image, dtype='int16')
-    image.close()
     label_name = os.path.basename(file_name).split('_')[0]
     images.append(input_img)
     labels.append(label_name)
