@@ -9,6 +9,7 @@ from datetime import datetime
 from PIL import Image
 import numpy as np
 
+import cv2
 import tensorflow as tf
 from tensorflow.python.platform import gfile
 import captcha_model as captcha
@@ -50,11 +51,11 @@ def input_data(image_dir):
   files = []
   i = 0
   for file_name in file_list:
-    image = Image.open(file_name)
-    image_gray = image.convert('L')
-    image_resize = image_gray.resize(size=(IMAGE_WIDTH,IMAGE_HEIGHT))
-    image.close()
-    input_img = np.array(image_resize, dtype='float32')
+    image = cv2.imread(file_name)
+    image = cv2.threshold(image,127,255,cv2.THRESH_BINARY)[1]
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    image = cv2.threshold(image,0,255,cv2.THRESH_BINARY)[1]
+    input_img = np.array(image, dtype='float32')
     input_img = np.multiply(input_img.flatten(), 1./255) - 0.5    
     images[i,:] = input_img
     base_name = os.path.basename(file_name)
